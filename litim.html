@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="white">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Litim — Marketplace Lithuania</title>
+<style>
+:root{--bg:#07080b;--p:rgba(18,20,26,.72);--p2:rgba(32,35,44,.8);--tx:#f2f3f5;--mu:#9aa0ab;--ac:#fff;--acx:#0a0a0a;--bd:rgba(255,255,255,.12);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme=gray]{--bg:#16181c;--p:rgba(52,55,62,.78);--p2:rgba(72,76,85,.85);--tx:#e9eaec;--mu:#aeb2ba;--ac:#c9ccd3;--acx:#17181b;--bd:rgba(255,255,255,.16)}
+*{box-sizing:border-box;margin:0}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+#bg{position:fixed;inset:0;z-index:0}
+#app,header{position:relative;z-index:1}
+header{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 18px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--p);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd)}
+.logo{font-weight:800;font-size:22px;letter-spacing:.14em;cursor:pointer}.logo span{opacity:.5}
+.sp{flex:1}
+button,input,select,textarea{font:inherit;color:var(--tx)}
+.btn{background:var(--p2);border:1px solid var(--bd);padding:8px 14px;border-radius:12px;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-1px);border-color:var(--ac)}
+.btn.pr{background:var(--ac);color:var(--acx);font-weight:600;border:0}
+input,select,textarea{background:rgba(0,0,0,.35);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--ac)}
+select option{background:#222}
+main{max-width:1100px;margin:0 auto;padding:22px 16px 60px}
+.hero{text-align:center;padding:50px 10px 26px}
+.hero h1{font-size:clamp(30px,6vw,54px);letter-spacing:.02em}
+.hero p{color:var(--mu);margin:12px auto;max-width:560px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.bar>*{flex:1;min-width:140px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.card{background:var(--p);border:1px solid var(--bd);border-radius:18px;overflow:hidden;cursor:pointer;backdrop-filter:blur(10px);transition:.25s}
+.card:hover{transform:translateY(-4px);border-color:var(--ac)}
+.ph{height:150px;display:grid;place-items:center;font-size:56px;background:linear-gradient(135deg,#2a2d36,#111318);background-size:cover;background-position:center}
+.ci{padding:12px 14px}.pri{font-weight:700;font-size:18px}.mu{color:var(--mu);font-size:13px}
+.panel{background:var(--p);border:1px solid var(--bd);border-radius:20px;padding:20px;backdrop-filter:blur(12px)}
+#modal{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.65);display:none;place-items:center;padding:16px;overflow:auto}
+#modal.on{display:grid}#modal .panel{width:100%;max-width:460px;background:var(--bg);max-height:92vh;overflow:auto}
+.f{display:flex;flex-direction:column;gap:10px}
+.av{width:72px;height:72px;border-radius:50%;background:var(--ac);color:var(--acx);display:grid;place-items:center;font-size:30px;font-weight:700}
+.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.chat{display:grid;grid-template-columns:240px 1fr;gap:14px;min-height:60vh}
+@media(max-width:700px){.chat{grid-template-columns:1fr}}
+.th{padding:10px;border-radius:12px;cursor:pointer;border:1px solid transparent}.th.on,.th:hover{border-color:var(--ac);background:var(--p2)}
+.msgs{display:flex;flex-direction:column;gap:8px;height:48vh;overflow:auto;padding:6px}
+.m{max-width:75%;padding:9px 13px;border-radius:14px;background:var(--p2)}.m.me{align-self:flex-end;background:var(--ac);color:var(--acx)}
+.note{font-size:13px;color:var(--mu);border:1px dashed var(--bd);padding:8px 10px;border-radius:10px}
+h2{margin-bottom:12px}.av{width:92px;height:92px;position:relative;overflow:hidden}.cam{position:absolute;inset:auto 0 0 0;background:rgba(0,0,0,.55);color:#fff;font-size:13px;text-align:center;padding:3px}.hero h1{background:linear-gradient(90deg,#fff,#8e94a0,#fff);background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 6s linear infinite}@keyframes sh{to{background-position:200% 0}}
+
+::selection{background:var(--ac);color:var(--acx)}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:8px}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(520px circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.07),transparent 60%)}
+@keyframes fi{from{opacity:0;transform:translateY(16px) scale(.98)}}
+.anim #app>*:not(#gr):not(.grid),.anim .grid>*{animation:fi .6s cubic-bezier(.2,.8,.2,1) backwards}
+.logo{text-shadow:0 0 18px rgba(255,255,255,.5)}
+.logo::after{content:'';display:inline-block;width:8px;height:8px;margin-left:6px;border-radius:50%;background:var(--ac);box-shadow:0 0 12px var(--ac);animation:pl 2s infinite}
+@keyframes pl{50%{opacity:.25}}
+header{box-shadow:0 10px 40px -20px #000}
+.pill{display:inline-block;padding:6px 16px;border:1px solid var(--bd);border-radius:99px;font-size:12px;letter-spacing:.22em;color:var(--mu);background:var(--p);backdrop-filter:blur(8px);margin-bottom:20px}
+.hero{padding:70px 10px 34px}
+.hero h1{font-size:clamp(36px,7.5vw,74px);font-weight:800;letter-spacing:-.025em;line-height:1.05;filter:drop-shadow(0 0 28px rgba(255,255,255,.25))}
+.hero p{font-size:17px}
+.btn.pr{box-shadow:0 0 26px -4px var(--ac);position:relative;overflow:hidden}
+.btn.pr::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.6) 50%,transparent 70%);transform:translateX(-130%);transition:.7s}
+.btn.pr:hover::after{transform:translateX(130%)}
+.btn:active{transform:scale(.96)}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px rgba(255,255,255,.1)}
+.panel{box-shadow:0 30px 80px -40px #000,inset 0 1px 0 rgba(255,255,255,.07)}
+.card{position:relative;transition:transform .25s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s;will-change:transform}
+.card::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:radial-gradient(240px circle at var(--cx,50%) var(--cy,0%),var(--ac),transparent 65%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:.3s;pointer-events:none;z-index:2}
+.card:hover::before{opacity:1}.card:hover{box-shadow:0 24px 60px -24px rgba(255,255,255,.22)}
+.ph{transition:transform .6s cubic-bezier(.2,.8,.2,1)}.card:hover .ph{transform:scale(1.08)}
+#modal{backdrop-filter:blur(10px)}
+#modal.on .panel{animation:pop .4s cubic-bezier(.2,1.2,.3,1)}
+@keyframes pop{from{opacity:0;transform:scale(.9) translateY(24px)}}
+.m{animation:fi .3s both}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<header>
+<div class="logo" onclick="go('home')">LIT<span>IM</span></div><div class="sp"></div>
+<button class="btn" onclick="go('chat')" id="hc"></button>
+<button class="btn pr" onclick="sellM()" id="hs"></button>
+<button class="btn" onclick="toggleLang()" id="hl"></button>
+<button class="btn" onclick="toggleTheme()" id="ht">◐</button>
+<button class="btn" onclick="me()?go('profile'):authM()" id="ha"></button>
+</header>
+<main id="app"></main>
+<div id="modal" onclick="if(event.target===this)closeM()"><div class="panel" id="mb"></div></div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const TX={en:{chats:'Chats',sell:'+ Sell',login:'Log in',reg:'Sign up',out:'Log out',h1:'Buy & sell across Lithuania',h2:'No warehouses, no middlemen. List it, chat, agree, get paid directly by the buyer.',search:'Search…',all:'All categories',allc:'All cities',name:'Name',email:'Email',pass:'Password',city:'City',title:'Title',price:'Price (€)',desc:'Description',cat:'Category',photo:'Photo',pub:'Publish',contact:'Message seller',send:'Send',none:'Nothing found',mine:'My listings',del:'Delete',nochat:'No chats yet. Open a listing and message the seller.',pay:'Litim has no payments. Agree with the seller and pay them directly (bank transfer).',need:'Please log in first',bad:'Wrong email or password',used:'Email already used',fill:'Fill all fields',type:'Type a message…',profile:'Profile',hello:'Hello!',seller:'Seller',have:'Have an account?',no:'No account?',dem:'Demo: data is stored in your browser.',avatar:'Change photo',save:'Save',empty:'No listings yet. Be the first to sell something!',cats:['Electronics','Phones','Computers & Gaming','Fashion','Shoes & Bags','Home & Garden','Furniture','Appliances','Vehicles','Auto parts','Bikes & Scooters','Sports & Outdoors','Hobbies & Music','Books & Movies','Kids & Baby','Beauty & Health','Pets','Tools & Building','Antiques & Art','Services','Other'],rep:['Hi! Yes, it is still available.','Sure, when can you pick it up?','I can do a small discount.','Send me your IBAN and I will confirm.']},
+lt:{chats:'Pokalbiai',sell:'+ Parduoti',login:'Prisijungti',reg:'Registracija',out:'Atsijungti',h1:'Pirk ir parduok visoje Lietuvoje',h2:'Be sandėlių ir tarpininkų. Skelbk, kalbėkis, susitark ir gauk pinigus tiesiogiai.',search:'Ieškoti…',all:'Visos kategorijos',allc:'Visi miestai',name:'Vardas',email:'El. paštas',pass:'Slaptažodis',city:'Miestas',title:'Pavadinimas',price:'Kaina (€)',desc:'Aprašymas',cat:'Kategorija',photo:'Nuotrauka',pub:'Skelbti',contact:'Rašyti pardavėjui',send:'Siųsti',none:'Nieko nerasta',mine:'Mano skelbimai',del:'Ištrinti',nochat:'Pokalbių dar nėra. Atidaryk skelbimą ir parašyk pardavėjui.',pay:'Litim neturi mokėjimų. Susitark su pardavėju ir sumokėk jam tiesiogiai (pavedimu).',need:'Pirmiausia prisijunk',bad:'Neteisingas el. paštas ar slaptažodis',used:'El. paštas jau naudojamas',fill:'Užpildyk visus laukus',type:'Rašyk žinutę…',profile:'Profilis',hello:'Labas!',seller:'Pardavėjas',have:'Jau turi paskyrą?',no:'Neturi paskyros?',dem:'Demo: duomenys saugomi tavo naršyklėje.',avatar:'Keisti nuotrauką',save:'Išsaugoti',empty:'Skelbimų dar nėra. Būk pirmas!',cats:['Elektronika','Telefonai','Kompiuteriai ir žaidimai','Mada','Batai ir krepšiai','Namai ir sodas','Baldai','Buitinė technika','Transportas','Autodalys','Dviračiai ir paspirtukai','Sportas ir lauke','Hobiai ir muzika','Knygos ir filmai','Vaikams','Grožis ir sveikata','Gyvūnai','Įrankiai ir statyba','Antikvaras ir menas','Paslaugos','Kita'],rep:['Labas! Taip, dar turiu.','Gerai, kada galėtum atsiimti?','Galiu šiek tiek nuleisti kainą.','Atsiųsk savo IBAN, patvirtinsiu.']}};
+const EM=['💻','📱','🎮','👗','👟','🌿','🛋️','🧺','🚗','🔧','🚲','⚽','🎸','📚','🧸','💄','🐾','🛠️','🏺','🤝','📦'];
+let S={users:[],me:null,items:[],chats:{},lang:'en',theme:'white'},V='home',F={q:'',c:'',city:''},CH=null;
+try{const r=localStorage.getItem('litim');if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+S.items=S.items.filter(i=>!/^s\d/.test(i.id));
+const save=()=>{try{localStorage.setItem('litim',JSON.stringify(S))}catch(e){}};
+const T=k=>TX[S.lang][k],me=()=>S.users.find(u=>u.id===S.me);
+function chrome(){document.documentElement.dataset.theme=S.theme;document.documentElement.lang=S.lang;$('hc').textContent='💬 '+T('chats');$('hs').textContent=T('sell');$('hl').textContent=S.lang==='en'?'LT':'EN';$('ha').textContent=me()?'👤 '+me().name:T('login')}
+function toggleLang(){S.lang=S.lang==='en'?'lt':'en';save();render()}
+function toggleTheme(){S.theme=S.theme==='white'?'gray':'white';save();chrome()}
+function go(v){V=v;render()}
+function openM(h){$('mb').innerHTML=h;$('modal').classList.add('on')}
+function closeM(){$('modal').classList.remove('on')}
+function render(){chrome();({home,profile,chat})[V]();document.body.classList.add('anim');document.querySelectorAll('.grid>*').forEach((e,k)=>e.style.animationDelay=Math.min(k,14)*45+'ms');clearTimeout(window._a);window._a=setTimeout(()=>document.body.classList.remove('anim'),1200)}
+function home(){
+const L=S.items.filter(i=>(!F.q||i.t.toLowerCase().includes(F.q.toLowerCase()))&&(F.c===''||i.c==F.c)&&(!F.city||i.city===F.city));
+$('app').innerHTML=`<div class="hero"><div class="pill">✦ LITHUANIA · P2P MARKET</div><h1>${T('h1')}</h1><p>${T('h2')}</p></div>
+<div class="bar"><input id="q" placeholder="${T('search')}" value="${esc(F.q)}" oninput="F.q=this.value;list()">
+<select onchange="F.c=this.value;list()"><option value="">${T('all')}</option>${T('cats').map((c,i)=>`<option value="${i}"${F.c==i&&F.c!==''?' selected':''}>${c}</option>`).join('')}</select>
+</div><div id="gr"></div>`;list()}
+function card(i){return `<div class="card" onclick="view('${i.id}')"><div class="ph" style="${i.img?`background-image:url(${i.img})`:''}">${i.img?'':EM[i.c]}</div><div class="ci"><div class="pri">${esc(i.p)} €</div><div>${esc(i.t)}</div><div class="mu">${T('cats')[i.c]}</div></div></div>`}
+function list(){const L=S.items.filter(i=>(!F.q||i.t.toLowerCase().includes(F.q.toLowerCase()))&&(F.c===''||i.c==F.c)&&(!F.city||i.city===F.city));$('gr').innerHTML=L.length?`<div class="grid">${L.map(card).join('')}</div>`:`<p class="mu" style="text-align:center;padding:40px 0">${S.items.length?T('none'):T('empty')}</p>`}
+function view(id){const i=S.items.find(x=>x.id===id);openM(`<div class="ph" style="border-radius:14px;height:200px;${i.img?`background-image:url(${i.img})`:''}">${i.img?'':EM[i.c]}</div><h2 style="margin-top:12px">${esc(i.t)}</h2><div class="pri" style="font-size:24px">${esc(i.p)} €</div><p class="mu" style="margin:8px 0">${T('cats')[i.c]} · ${T('seller')}: ${esc(i.un)}</p><p style="margin-bottom:12px">${esc(i.d)}</p><p class="note" style="margin-bottom:12px">${T('pay')}</p><button class="btn pr" style="width:100%" onclick="startChat('${i.id}')">${T('contact')}</button>`)}
+function authM(reg=false){openM(`<h2>${reg?T('reg'):T('login')}</h2><div class="f">${reg?`<input id="an" placeholder="${T('name')}">`:''}<input id="ae" type="email" placeholder="${T('email')}"><input id="ap" type="password" placeholder="${T('pass')}"><button class="btn pr" onclick="auth(${reg})">${reg?T('reg'):T('login')}</button><p class="mu" id="er"></p><p class="mu">${reg?T('have'):T('no')} <a href="#" style="color:var(--ac)" onclick="authM(${!reg});return false">${reg?T('login'):T('reg')}</a></p><p class="note">${T('dem')}</p></div>`)}
+function auth(reg){const e=$('ae').value.trim().toLowerCase(),p=btoa(unescape(encodeURIComponent($('ap').value)));if(!e||!$('ap').value||(reg&&!$('an').value.trim()))return $('er').textContent=T('fill');
+if(reg){if(S.users.some(u=>u.e===e))return $('er').textContent=T('used');const u={id:'u'+Date.now(),name:$('an').value.trim(),e,p};S.users.push(u);S.me=u.id}
+else{const u=S.users.find(u=>u.e===e&&u.p===p);if(!u)return $('er').textContent=T('bad');S.me=u.id}
+save();closeM();render()}
+function sellM(){if(!me())return authM(true);openM(`<h2>${T('sell').replace('+ ','')}</h2><div class="f"><input id="st" placeholder="${T('title')}"><input id="sp" type="number" min="0" placeholder="${T('price')}"><select id="sc">${T('cats').map((c,i)=>`<option value="${i}">${c}</option>`).join('')}</select><textarea id="sd" rows="3" placeholder="${T('desc')}"></textarea><input id="sf" type="file" accept="image/*"><button class="btn pr" onclick="sell()">${T('pub')}</button><p class="mu" id="er"></p></div>`)}
+function sell(){const t=$('st').value.trim(),p=$('sp').value;if(!t||p==='')return $('er').textContent=T('fill');
+const add=img=>{S.items.unshift({id:'i'+Date.now(),t,p,c:+$('sc').value,d:$('sd').value,u:S.me,un:me().name,img});save();closeM();go('home')};
+const f=$('sf').files[0];if(!f)return add('');const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,560/im.width),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);add(c.toDataURL('image/jpeg',.7))};im.src=r.result};r.readAsDataURL(f)}
+function shrink(f,max,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.72))};im.src=r.result};r.readAsDataURL(f)}
+function setAv(f){if(f)shrink(f,220,d=>{me().av=d;save();render()})}
+function rename(){const n=$('pn').value.trim();if(!n)return;me().name=n;S.items.forEach(i=>{if(i.u===S.me)i.un=n});save();render()}
+function profile(){const u=me();if(!u)return go('home');const my=S.items.filter(i=>i.u===u.id);
+$('app').innerHTML=`<div class="panel"><div class="row"><label class="av" style="cursor:pointer;${u.av?`background:url(${u.av}) center/cover`:''}" title="${T('avatar')}">${u.av?'':esc(u.name[0].toUpperCase())}<input type="file" accept="image/*" hidden onchange="setAv(this.files[0])"><span class="cam">📷 ${T('avatar')}</span></label><div style="flex:1;min-width:200px"><div class="row" style="flex-wrap:nowrap"><input id="pn" value="${esc(u.name)}" maxlength="30"><button class="btn pr" onclick="rename()">${T('save')}</button></div><div class="mu" style="margin-top:6px">${esc(u.e)}</div></div><button class="btn" onclick="S.me=null;save();go('home')">${T('out')}</button></div></div><h2 style="margin:22px 0 12px">${T('mine')} (${my.length})</h2><div class="grid">${my.map(i=>`<div>${card(i)}<button class="btn" style="width:100%;margin-top:6px" onclick="delI('${i.id}')">${T('del')}</button></div>`).join('')}</div>`}
+function delI(id){S.items=S.items.filter(i=>i.id!==id);save();profile()}
+function startChat(id){if(!me()){closeM();return authM(true)}CH=id;const k=id+'|'+S.me;if(!S.chats[k]){S.chats[k]=[];save()}closeM();go('chat')}
+function chat(){if(!me()){go('home');return authM()}
+const ks=Object.keys(S.chats).filter(k=>k.endsWith('|'+S.me)&&S.items.some(i=>i.id===k.split('|')[0]));
+if(!CH&&ks.length)CH=ks[0].split('|')[0];
+const it=S.items.find(i=>i.id===CH),k=CH+'|'+S.me,ms=S.chats[k]||[];
+$('app').innerHTML=`<h2>${T('chats')}</h2><div class="chat"><div class="panel" style="padding:10px">${ks.length?ks.map(x=>{const i=S.items.find(i=>i.id===x.split('|')[0]);return `<div class="th ${i.id===CH?'on':''}" onclick="CH='${i.id}';chat()"><b>${esc(i.un)}</b><div class="mu">${esc(i.t)}</div></div>`}).join(''):`<p class="mu">${T('nochat')}</p>`}</div>
+<div class="panel">${it&&S.chats[k]?`<div class="row" style="margin-bottom:8px"><b>${esc(it.un)}</b><span class="mu">· ${esc(it.t)} · ${esc(it.p)} €</span></div><div class="note" style="margin-bottom:8px">${T('pay')}</div><div class="msgs" id="ms">${ms.map(m=>`<div class="m ${m.me?'me':''}">${m.i?`<img src="${m.i}" style="max-width:100%;border-radius:10px;display:block;margin-bottom:${m.x?6:0}px">`:''}${esc(m.x||'')}</div>`).join('')}</div><div class="row" style="margin-top:8px;flex-wrap:nowrap"><label class="btn" style="cursor:pointer">📎<input type="file" accept="image/*" hidden onchange="sendImg(this.files[0])"></label><input id="mi" placeholder="${T('type')}" onkeydown="if(event.key==='Enter')send()"><button class="btn pr" onclick="send()">${T('send')}</button></div>`:''}</div></div>`;
+const m=$('ms');if(m)m.scrollTop=1e9}
+function send(){const v=$('mi').value.trim();if(!v)return;S.chats[CH+'|'+S.me].push({me:1,x:v});save();chat();$('mi')?.focus()}
+function sendImg(f){if(f)shrink(f,700,d=>{S.chats[CH+'|'+S.me].push({me:1,i:d});save();chat()})}
+/* cosmos */
+const cv=$('bg'),c=cv.getContext('2d');let W,H,st=[],ship=null,t0=0,MX=0,MY=0,sh=[],tr=[],ast=[];
+const PL=[[80,.9,4,'#b8b8b8'],[125,.62,6,'#e8cda0'],[175,.45,7,'#6fa8ff'],[225,.34,5,'#ff8a65'],[310,.2,13,'#d9b98a'],[400,.14,11,'#e6d7a8']];
+const NB=[['150,165,200',.18,.25,.3],['210,210,230',.8,.75,.26],['110,120,150',.5,.95,.3]];
+for(let i=0;i<80;i++)ast.push([Math.random()*6.28,262+Math.random()*18,Math.random()*1.2+.3]);
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;st=Array.from({length:Math.min(320,W*H/5200|0)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.2,p:Math.random()*6}))}
+addEventListener('resize',rs);rs();
+addEventListener('pointermove',e=>{const r=document.documentElement.style;r.setProperty('--mx',e.clientX+'px');r.setProperty('--my',e.clientY+'px');MX=e.clientX/innerWidth-.5;MY=e.clientY/innerHeight-.5});
+document.addEventListener('pointermove',e=>{const d=e.target.closest&&e.target.closest('.card');if(d){const b=d.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;d.style.setProperty('--cx',x+'px');d.style.setProperty('--cy',y+'px');d.style.transform=`perspective(700px) rotateX(${(.5-y/b.height)*9}deg) rotateY(${(x/b.width-.5)*9}deg) translateY(-5px)`}});
+document.addEventListener('pointerout',e=>{const d=e.target.closest&&e.target.closest('.card');if(d&&!d.contains(e.relatedTarget))d.style.transform=''});
+function spawn(){const dir=Math.random()<.5?1:-1;ship={x:dir>0?-90:W+90,y:H*(.15+Math.random()*.6),vx:dir*(2.6+Math.random()*1.4),vy:(Math.random()-.5)*.8}}
+function frame(t){
+c.globalCompositeOperation='source-over';c.clearRect(0,0,W,H);c.globalCompositeOperation='lighter';
+NB.forEach((n,i)=>{const x=W*n[1]+Math.sin(t/9000+i*2)*60-MX*50,y=H*n[2]+Math.cos(t/11000+i)*50-MY*50,r=Math.max(W,H)*n[3]*1.4,g=c.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${n[0]},.12)`);g.addColorStop(1,`rgba(${n[0]},0)`);c.fillStyle=g;c.fillRect(0,0,W,H)});
+c.globalCompositeOperation='source-over';
+for(const s of st){c.globalAlpha=.35+.65*Math.abs(Math.sin(t/900+s.p));c.fillStyle='#fff';c.beginPath();c.arc(s.x-MX*s.r*28,s.y-MY*s.r*28,s.r,0,7);c.fill()}
+c.globalAlpha=1;
+if(Math.random()<.005)sh.push({x:Math.random()*W,y:Math.random()*H*.5,vx:-9-Math.random()*5,vy:4+Math.random()*3,l:1});
+sh=sh.filter(q=>q.l>0);for(const q of sh){q.x+=q.vx;q.y+=q.vy;q.l-=.02;const g=c.createLinearGradient(q.x,q.y,q.x-q.vx*7,q.y-q.vy*7);g.addColorStop(0,`rgba(255,255,255,${q.l})`);g.addColorStop(1,'rgba(255,255,255,0)');c.strokeStyle=g;c.lineWidth=1.6;c.beginPath();c.moveTo(q.x,q.y);c.lineTo(q.x-q.vx*7,q.y-q.vy*7);c.stroke()}
+const cx=(W>800?W*.68:W*.5)-MX*14,cy=H*.42-MY*14,k=Math.min(1,W/1000),cr=Math.cos(-.2),sr=Math.sin(-.2);
+const pos=(d,a)=>{const x=Math.cos(a)*d*k*1.5,y=Math.sin(a)*d*k*.5;return[cx+x*cr-y*sr,cy+x*sr+y*cr]};
+for(const p of PL){c.strokeStyle='rgba(255,255,255,.08)';c.beginPath();c.ellipse(cx,cy,p[0]*k*1.5,p[0]*k*.5,-.2,0,7);c.stroke()}
+const pu=1+Math.sin(t/700)*.07,g=c.createRadialGradient(cx,cy,2,cx,cy,78*k*pu);g.addColorStop(0,'#fff');g.addColorStop(.18,'#fff3c4');g.addColorStop(.5,'rgba(255,190,90,.3)');g.addColorStop(1,'rgba(255,150,60,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy,78*k*pu,0,7);c.fill();
+c.fillStyle='rgba(200,200,210,.55)';for(const a of ast){const q=pos(a[1],a[0]+t/1000*.07);c.beginPath();c.arc(q[0],q[1],a[2],0,7);c.fill()}
+for(const p of PL){const q=pos(p[0],t/1000*p[1]*.5+p[0]);c.shadowBlur=16;c.shadowColor=p[3];c.fillStyle=p[3];c.beginPath();c.arc(q[0],q[1],p[2]*k+1,0,7);c.fill();c.shadowBlur=0;
+if(p[0]>390){c.strokeStyle='rgba(230,215,170,.6)';c.beginPath();c.ellipse(q[0],q[1],p[2]*k*2.1,p[2]*k*.6,-.3,0,7);c.stroke()}}
+if(!ship&&t-t0>8000)spawn();
+tr=tr.filter(q=>q.l>0);for(const q of tr){q.x+=q.vx;q.y+=q.vy;q.l-=.03;c.fillStyle=`rgba(255,${150+q.l*90|0},${60+q.l*120|0},${q.l*.7})`;c.beginPath();c.arc(q.x,q.y,1+q.l*2.6,0,7);c.fill()}
+if(ship){ship.x+=ship.vx;ship.y+=ship.vy;const ang=Math.atan2(ship.vy,ship.vx);
+tr.push({x:ship.x-Math.cos(ang)*20,y:ship.y-Math.sin(ang)*20,vx:-ship.vx*.15+(Math.random()-.5)*.6,vy:(Math.random()-.5)*.6,l:1});
+c.save();c.translate(ship.x,ship.y);c.rotate(ang);if(ship.vx<0)c.scale(1,-1);
+c.shadowBlur=18;c.shadowColor='rgba(150,190,255,.7)';
+const f=10+Math.random()*10,fg=c.createLinearGradient(-14,0,-34-f,0);fg.addColorStop(0,'rgba(255,210,120,.95)');fg.addColorStop(1,'rgba(255,80,20,0)');c.fillStyle=fg;c.beginPath();c.moveTo(-14,-4);c.lineTo(-34-f,0);c.lineTo(-14,4);c.fill();
+c.fillStyle='#e8eaee';c.beginPath();c.moveTo(24,0);c.quadraticCurveTo(6,-9,-14,-6);c.lineTo(-14,6);c.quadraticCurveTo(6,9,24,0);c.fill();
+c.fillStyle='#9aa0ab';c.beginPath();c.moveTo(-2,-6);c.lineTo(-16,-17);c.lineTo(-12,-5);c.moveTo(-2,6);c.lineTo(-16,17);c.lineTo(-12,5);c.fill();
+c.fillStyle='#6fa8ff';c.beginPath();c.arc(8,0,3,0,7);c.fill();c.restore();
+if(ship.x<-130||ship.x>W+130){ship=null;t0=t}}
+requestAnimationFrame(frame)}
+requestAnimationFrame(frame);render();
+</script>
+</body>
+</html>
