@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Янтарная лавка</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,600;0,700;1,600&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+/* Layout: dark amber "shop window" — hero medallion, souvenir selector with detail stage, quiz, food strip */
+:root{
+  --bg:#17110C; --panel:#231A12; --panel2:#2E2217; --fg:#F1E7D3; --muted:#B5A58B; --line:#43331F;
+  --amber:#EBA51C; --amber-ink:#17110C; --red:#D4505B; --ok:#7FC49A;
+  --display:'Cormorant','Times New Roman',serif; --body:'Golos Text',system-ui,sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#F1EEE8;--panel:#FFFFFF;--panel2:#E9E3D6;--fg:#241A0F;--muted:#6B5B43;--line:#D5CAB4;--amber:#A85F00;--amber-ink:#FFFFFF;--red:#A52A37;--ok:#2E7D52;color-scheme:light}}
+:root[data-theme="light"]{--bg:#F1EEE8;--panel:#FFFFFF;--panel2:#E9E3D6;--fg:#241A0F;--muted:#6B5B43;--line:#D5CAB4;--amber:#A85F00;--amber-ink:#FFFFFF;--red:#A52A37;--ok:#2E7D52;color-scheme:light}
+:root[data-theme="dark"]{--bg:#17110C;--panel:#231A12;--panel2:#2E2217;--fg:#F1E7D3;--muted:#B5A58B;--line:#43331F;--amber:#EBA51C;--amber-ink:#17110C;--red:#D4505B;--ok:#7FC49A;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);padding-block:0 64px;padding-inline:clamp(16px,4vw,40px)}
+.wrap{max-width:1080px;margin-inline:auto}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.02;margin:0;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:20px}
+.brand{font-family:var(--display);font-size:1.4rem;font-weight:700;letter-spacing:.02em}
+.brand span{color:var(--amber)}
+.tgl{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:.85rem}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(24px,5vw,64px);align-items:center;padding-block:clamp(16px,5vw,48px) 56px}
+.eyebrow{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:600}
+.hero h1{font-size:clamp(3rem,9vw,6.4rem);margin-block:14px 18px}
+.hero h1 em{color:var(--amber);font-style:italic}
+.hero p{max-width:46ch;color:var(--muted);font-size:1.1rem;margin:0 0 26px}
+.cta{display:inline-block;background:var(--amber);color:var(--amber-ink);border:0;border-radius:999px;padding:14px 26px;font-weight:600;text-decoration:none}
+.medal{position:relative;aspect-ratio:1;max-width:100%;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--amber),transparent 62%),var(--panel);display:grid;place-items:center;animation:float 7s ease-in-out infinite}
+.medal img{width:112%;max-width:none;margin-inline:-6%}
+@keyframes float{50%{transform:translateY(-10px) rotate(1.5deg)}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:72px}
+.stat{background:var(--panel);border-radius:14px;padding:18px;min-width:0}
+.stat b{display:block;font-family:var(--display);font-size:2.3rem;color:var(--amber);line-height:1}
+.stat span{font-size:.85rem;color:var(--muted)}
+section{margin-top:72px}
+h2{font-size:clamp(2.2rem,5vw,3.6rem);margin-bottom:8px}
+.lead{color:var(--muted);max-width:60ch;margin:0 0 28px}
+.picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin-bottom:20px}
+.pick{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px 8px 12px;text-align:center;transition:transform .2s,border-color .2s;min-width:0}
+.pick:hover{transform:translateY(-3px)}
+.pick img{width:100%;max-width:92px;border-radius:50%;display:block;margin:0 auto 6px}
+.pick span{font-size:.82rem;font-weight:500;display:block}
+.pick[aria-selected="true"]{border-color:var(--amber);background:var(--panel2)}
+.stage{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(20px,4vw,48px);background:var(--panel);border-radius:28px;padding:clamp(20px,4vw,44px);align-items:center}
+.stage .art{border-radius:24px;background:#F6ECD6;overflow:hidden;aspect-ratio:8/5;max-width:100%}
+.stage .art img{width:100%;display:block}
+.lt{font-family:var(--display);font-style:italic;font-size:1.5rem;color:var(--amber);margin-bottom:2px}
+.stage h3{font-size:clamp(2rem,4.4vw,3.2rem);margin-bottom:14px}
+.stage ul{margin:0 0 18px;padding-left:1.1em;color:var(--fg)}
+.stage li{margin-bottom:6px}
+.sym{background:var(--panel2);border-radius:14px;padding:12px 16px;font-size:.95rem}
+.sym b{color:var(--amber)}
+.food{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.fd{background:var(--panel);border-radius:18px;padding:18px;min-width:0}
+.fd h3{font-size:1.7rem;margin-bottom:6px}
+.fd p{margin:0;color:var(--muted);font-size:.95rem}
+.quiz{background:var(--panel);border-radius:28px;padding:clamp(20px,4vw,44px)}
+.prog{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-bottom:14px}
+.bar{height:6px;border-radius:9px;background:var(--panel2);margin-bottom:22px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--amber);transition:width .4s}
+.q{font-family:var(--display);font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.1;margin:0 0 18px}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;background:var(--panel2);border:2px solid transparent;border-radius:14px;padding:14px 16px}
+.opt:hover:not(:disabled){border-color:var(--amber)}
+.opt.ok{border-color:var(--ok)}.opt.bad{border-color:var(--red)}
+.fb{min-height:3em;margin:14px 0 0;color:var(--muted)}
+.next{margin-top:10px}
+.score{font-family:var(--display);font-size:clamp(3rem,10vw,6rem);color:var(--amber);line-height:1}
+.credit{margin-top:22px;font-size:.95rem;color:var(--muted)}.credit b{color:var(--amber);font-family:var(--display);font-size:1.35rem;font-weight:700}
+.made{display:block;margin-top:10px;color:var(--fg);font-size:1rem}.made b{color:var(--amber)}
+footer{margin-top:72px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:20px}
+footer a{color:var(--amber)}
+@media(max-width:760px){.hero,.stage{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.medal{max-width:320px;margin-inline:auto}}
+@media(prefers-reduced-motion:reduce){.medal{animation:none}*{transition:none!important}}
+body{margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><div class="brand">Янтарная <span>лавка</span></div><button class="tgl" id="tgl" type="button">Тема</button></div>
+
+<header class="hero">
+  <div>
+    <div class="eyebrow">Литва · ремёсла · традиции</div>
+    <h1>Сувениры, у которых есть <em>история</em></h1>
+    <p>Янтарь, лён, соломенные звёзды и вербы. Выберите вещь, узнайте, из чего она сделана и что означает, а потом проверьте себя в викторине.</p>
+    <a class="cta" href="#catalog">Открыть витрину</a>
+    <div class="credit">Сделал <b>Vitalij Žuravliov</b></div>
+  </div>
+  <div class="medal" aria-hidden="true"><img id="heroImg" alt=""></div>
+</header>
+
+<div class="stats">
+  <div class="stat"><b>1009</b><span>год первого упоминания Литвы</span></div>
+  <div class="stat"><b>≈3 000</b><span>сертифицированных традиционных изделий</span></div>
+  <div class="stat"><b>2001</b><span>крестоделие в списке ЮНЕСКО</span></div>
+  <div class="stat"><b>5</b><span>этнографических регионов</span></div>
+</div>
+
+<section id="catalog">
+  <h2>Витрина</h2>
+  <p class="lead">Нажмите на сувенир, чтобы увидеть, что за ним стоит.</p>
+  <div class="picker" role="tablist" id="picker"></div>
+  <div class="stage" id="stage" aria-live="polite">
+    <div class="art"><img id="sImg" alt=""></div>
+    <div>
+      <div class="lt" id="sLt"></div>
+      <h3 id="sTitle"></h3>
+      <ul id="sList"></ul>
+      <div class="sym" id="sSym"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Вкусные подарки</h2>
+  <p class="lead">Сувениры, которые можно съесть.</p>
+  <div class="food">
+    <div class="fd"><h3>Шакотис</h3><p>Многоветвистый десерт из множества яиц. Долго хранится и не теряет формы, на литовской свадьбе без него не обходятся.</p></div>
+    <div class="fd"><h3>Яблочный сыр</h3><p>Сладость из варёных яблок. Раньше её делали с мёдом, позже мёд заменили сахаром.</p></div>
+    <div class="fd"><h3>Мёд и медовуха</h3><p>Мёд из нектара местных деревьев и трав. Медовуха относится к самым старым алкогольным напиткам (только для взрослых).</p></div>
+    <div class="fd"><h3>Медовые пряники</h3><p>Meduoliai со специями: корица, имбирь, кардамон. Есть и печенье-«грибочки» с маком.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Проверьте себя</h2>
+  <p class="lead">Шесть вопросов по проекту.</p>
+  <div class="quiz" id="quiz"></div>
+</section>
+
+<footer>Источники: Lithuanian National Heritage (Министерство сельского хозяйства Литвы, 2023), Lithuanian Folk Art Institute (ltfai.org), Vytautas Magnus University: Best Souvenirs from Lithuania. Иллюстрации нарисованы для проекта.<span class="made">Сделал <b>Vitalij Žuravliov</b></span></footer>
+</div>
+<script>
+const ART={"Gintaras":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 350\" width=\"1120\" height=\"700\"><circle cx=\"280\" cy=\"175\" r=\"165\" fill=\"#F6ECD6\"/><path d=\"M110 90 Q280 250 450 90\" fill=\"none\" stroke=\"#7A4A06\" stroke-width=\"3\" opacity=\".0\"/><circle cx=\"110\" cy=\"90\" r=\"17\" fill=\"#C77A0A\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"106\" cy=\"85\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"134.28571428571428\" cy=\"112.55102040816325\" r=\"13\" fill=\"#E8A317\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"130.28571428571428\" cy=\"107.55102040816325\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"158.57142857142856\" cy=\"131.6326530612245\" r=\"13\" fill=\"#C77A0A\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"154.57142857142856\" cy=\"126.63265306122449\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"182.85714285714283\" cy=\"147.24489795918367\" r=\"17\" fill=\"#E8A317\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"178.85714285714283\" cy=\"142.24489795918367\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"207.14285714285714\" cy=\"159.3877551020408\" r=\"13\" fill=\"#C77A0A\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"203.14285714285714\" cy=\"154.3877551020408\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"231.42857142857144\" cy=\"168.0612244897959\" r=\"13\" fill=\"#E8A317\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"227.42857142857144\" cy=\"163.0612244897959\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"255.7142857142857\" cy=\"173.26530612244898\" r=\"17\" fill=\"#C77A0A\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"251.7142857142857\" cy=\"168.26530612244898\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"280\" cy=\"175\" r=\"13\" fill=\"#E8A317\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"276\" cy=\"170\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"304.2857142857143\" cy=\"173.26530612244898\" r=\"13\" fill=\"#C77A0A\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"300.2857142857143\" cy=\"168.26530612244898\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"328.57142857142856\" cy=\"168.0612244897959\" r=\"17\" fill=\"#E8A317\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"324.57142857142856\" cy=\"163.0612244897959\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"352.8571428571429\" cy=\"159.3877551020408\" r=\"13\" fill=\"#C77A0A\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"348.8571428571429\" cy=\"154.3877551020408\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"377.1428571428571\" cy=\"147.24489795918367\" r=\"13\" fill=\"#E8A317\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"373.1428571428571\" cy=\"142.24489795918367\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"401.4285714285714\" cy=\"131.6326530612245\" r=\"17\" fill=\"#C77A0A\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"397.4285714285714\" cy=\"126.63265306122449\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"425.7142857142857\" cy=\"112.55102040816325\" r=\"13\" fill=\"#E8A317\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"421.7142857142857\" cy=\"107.55102040816325\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/><circle cx=\"450\" cy=\"90\" r=\"13\" fill=\"#C77A0A\" stroke=\"#7A4A06\" stroke-width=\"2\"/><circle cx=\"446\" cy=\"85\" r=\"4\" fill=\"#FFE29A\" opacity=\".8\"/>\n<path d=\"M280 235 C225 235 215 290 250 315 C268 328 292 328 310 315 C345 290 335 235 280 235Z\" fill=\"#E8A317\" stroke=\"#7A4A06\" stroke-width=\"4\"/>\n<path d=\"M250 262 C255 252 270 250 276 258\" stroke=\"#FFE29A\" stroke-width=\"6\" fill=\"none\" stroke-linecap=\"round\" opacity=\".85\"/>\n<ellipse cx=\"288\" cy=\"288\" rx=\"9\" ry=\"4\" transform=\"rotate(-20 288 288)\" fill=\"#7A4A06\" opacity=\".55\"/><circle cx=\"270\" cy=\"296\" r=\"3\" fill=\"#7A4A06\" opacity=\".5\"/></svg>","Linas":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 350\" width=\"1120\" height=\"700\"><circle cx=\"280\" cy=\"175\" r=\"165\" fill=\"#F6ECD6\"/><path d=\"M135 100 L430 80 L440 255 L140 275Z\" fill=\"#EFE3C8\" stroke=\"#B49B6B\" stroke-width=\"3\"/><line x1=\"150\" y1=\"85\" x2=\"150\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"172\" y1=\"85\" x2=\"172\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"194\" y1=\"85\" x2=\"194\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"216\" y1=\"85\" x2=\"216\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"238\" y1=\"85\" x2=\"238\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"260\" y1=\"85\" x2=\"260\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"282\" y1=\"85\" x2=\"282\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"304\" y1=\"85\" x2=\"304\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"326\" y1=\"85\" x2=\"326\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"348\" y1=\"85\" x2=\"348\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"370\" y1=\"85\" x2=\"370\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"392\" y1=\"85\" x2=\"392\" y2=\"270\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"150\" y1=\"95\" x2=\"415\" y2=\"95\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"150\" y1=\"116\" x2=\"415\" y2=\"116\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"150\" y1=\"137\" x2=\"415\" y2=\"137\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"150\" y1=\"158\" x2=\"415\" y2=\"158\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"150\" y1=\"179\" x2=\"415\" y2=\"179\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"150\" y1=\"200\" x2=\"415\" y2=\"200\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"150\" y1=\"221\" x2=\"415\" y2=\"221\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"150\" y1=\"242\" x2=\"415\" y2=\"242\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><line x1=\"150\" y1=\"263\" x2=\"415\" y2=\"263\" stroke=\"#C9B58E\" stroke-width=\"1.5\"/><path d=\"M135 100 L430 80 L440 255 L140 275Z\" fill=\"none\" stroke=\"#B49B6B\" stroke-width=\"3\"/><path d=\"M150 258 L430 240\" stroke=\"#8C2F39\" stroke-width=\"5\" stroke-dasharray=\"14 8\"/><line x1=\"95\" y1=\"250\" x2=\"95\" y2=\"320\" stroke=\"#2F5D50\" stroke-width=\"4\"/><circle cx=\"95\" cy=\"250\" r=\"15\" fill=\"#5B8BD0\"/><circle cx=\"95\" cy=\"250\" r=\"5\" fill=\"#FFE29A\"/><line x1=\"470\" y1=\"270\" x2=\"470\" y2=\"340\" stroke=\"#2F5D50\" stroke-width=\"4\"/><circle cx=\"470\" cy=\"270\" r=\"15\" fill=\"#5B8BD0\"/><circle cx=\"470\" cy=\"270\" r=\"5\" fill=\"#FFE29A\"/><line x1=\"500\" y1=\"285\" x2=\"500\" y2=\"355\" stroke=\"#2F5D50\" stroke-width=\"4\"/><circle cx=\"500\" cy=\"285\" r=\"15\" fill=\"#5B8BD0\"/><circle cx=\"500\" cy=\"285\" r=\"5\" fill=\"#FFE29A\"/></svg>","Sodai":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 350\" width=\"1120\" height=\"700\"><circle cx=\"280\" cy=\"175\" r=\"165\" fill=\"#F6ECD6\"/><line x1=\"280\" y1=\"10\" x2=\"280\" y2=\"50\" stroke=\"#8C6B2F\" stroke-width=\"3\"/><line x1=\"280\" y1=\"175\" x2=\"405\" y2=\"175\" stroke=\"#E2B94B\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"311.25\" cy=\"175\" r=\"8\" fill=\"#D98E04\"/><circle cx=\"342.5\" cy=\"175\" r=\"8\" fill=\"#D98E04\"/><circle cx=\"373.75\" cy=\"175\" r=\"8\" fill=\"#D98E04\"/><polygon points=\"350,175 363.1491579260158,209.44150891285807 329.49747468305833,224.49747468305833\" fill=\"none\" stroke=\"#E2B94B\" stroke-width=\"5\"/><line x1=\"280\" y1=\"175\" x2=\"368.3883476483185\" y2=\"263.3883476483184\" stroke=\"#E2B94B\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"302.0970869120796\" cy=\"197.09708691207962\" r=\"6\" fill=\"#D98E04\"/><circle cx=\"324.19417382415924\" cy=\"219.1941738241592\" r=\"6\" fill=\"#D98E04\"/><circle cx=\"346.2912607362388\" cy=\"241.29126073623883\" r=\"6\" fill=\"#D98E04\"/><polygon points=\"329.49747468305833,224.49747468305833 314.44150891285807,258.1491579260158 280,245\" fill=\"none\" stroke=\"#E2B94B\" stroke-width=\"5\"/><line x1=\"280\" y1=\"175\" x2=\"280\" y2=\"300\" stroke=\"#E2B94B\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"280\" cy=\"206.25\" r=\"8\" fill=\"#D98E04\"/><circle cx=\"280\" cy=\"237.5\" r=\"8\" fill=\"#D98E04\"/><circle cx=\"280\" cy=\"268.75\" r=\"8\" fill=\"#D98E04\"/><polygon points=\"280,245 245.55849108714193,258.1491579260158 230.50252531694167,224.49747468305833\" fill=\"none\" stroke=\"#E2B94B\" stroke-width=\"5\"/><line x1=\"280\" y1=\"175\" x2=\"191.61165235168158\" y2=\"263.3883476483185\" stroke=\"#E2B94B\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"257.9029130879204\" cy=\"197.09708691207962\" r=\"6\" fill=\"#D98E04\"/><circle cx=\"235.8058261758408\" cy=\"219.19417382415924\" r=\"6\" fill=\"#D98E04\"/><circle cx=\"213.70873926376117\" cy=\"241.29126073623883\" r=\"6\" fill=\"#D98E04\"/><polygon points=\"230.50252531694167,224.49747468305833 196.8508420739842,209.4415089128581 210,175\" fill=\"none\" stroke=\"#E2B94B\" stroke-width=\"5\"/><line x1=\"280\" y1=\"175\" x2=\"155\" y2=\"175.00000000000003\" stroke=\"#E2B94B\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"248.75\" cy=\"175\" r=\"8\" fill=\"#D98E04\"/><circle cx=\"217.5\" cy=\"175\" r=\"8\" fill=\"#D98E04\"/><circle cx=\"186.25\" cy=\"175\" r=\"8\" fill=\"#D98E04\"/><polygon points=\"210,175 196.85084207398415,140.55849108714193 230.50252531694167,125.50252531694167\" fill=\"none\" stroke=\"#E2B94B\" stroke-width=\"5\"/><line x1=\"280\" y1=\"175\" x2=\"191.61165235168153\" y2=\"86.61165235168157\" stroke=\"#E2B94B\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"257.9029130879204\" cy=\"152.90291308792038\" r=\"6\" fill=\"#D98E04\"/><circle cx=\"235.80582617584076\" cy=\"130.8058261758408\" r=\"6\" fill=\"#D98E04\"/><circle cx=\"213.70873926376117\" cy=\"108.70873926376117\" r=\"6\" fill=\"#D98E04\"/><polygon points=\"230.50252531694167,125.50252531694167 245.55849108714187,91.85084207398421 280,105\" fill=\"none\" stroke=\"#E2B94B\" stroke-width=\"5\"/><line x1=\"280\" y1=\"175\" x2=\"280\" y2=\"50\" stroke=\"#E2B94B\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"280\" cy=\"143.75\" r=\"8\" fill=\"#D98E04\"/><circle cx=\"280\" cy=\"112.5\" r=\"8\" fill=\"#D98E04\"/><circle cx=\"280\" cy=\"81.25\" r=\"8\" fill=\"#D98E04\"/><polygon points=\"280,105 314.4415089128581,91.8508420739842 329.49747468305833,125.50252531694167\" fill=\"none\" stroke=\"#E2B94B\" stroke-width=\"5\"/><line x1=\"280\" y1=\"175\" x2=\"368.3883476483184\" y2=\"86.61165235168154\" stroke=\"#E2B94B\" stroke-width=\"7\" stroke-linecap=\"round\"/><circle cx=\"302.0970869120796\" cy=\"152.90291308792038\" r=\"6\" fill=\"#D98E04\"/><circle cx=\"324.1941738241592\" cy=\"130.80582617584076\" r=\"6\" fill=\"#D98E04\"/><circle cx=\"346.2912607362388\" cy=\"108.70873926376116\" r=\"6\" fill=\"#D98E04\"/><polygon points=\"329.49747468305833,125.50252531694167 363.1491579260158,140.55849108714187 350,174.99999999999997\" fill=\"none\" stroke=\"#E2B94B\" stroke-width=\"5\"/><circle cx=\"280\" cy=\"175\" r=\"14\" fill=\"#8C2F39\"/></svg>","Verbos":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 350\" width=\"1120\" height=\"700\"><circle cx=\"280\" cy=\"175\" r=\"165\" fill=\"#F6ECD6\"/><line x1=\"200\" y1=\"90\" x2=\"275.5\" y2=\"270\" stroke=\"#7A5A2B\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"250\" y1=\"70\" x2=\"280.5\" y2=\"270\" stroke=\"#7A5A2B\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"300\" y1=\"60\" x2=\"285.5\" y2=\"270\" stroke=\"#7A5A2B\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"350\" y1=\"75\" x2=\"290.5\" y2=\"270\" stroke=\"#7A5A2B\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"395\" y1=\"100\" x2=\"295\" y2=\"270\" stroke=\"#7A5A2B\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"225\" y1=\"125\" x2=\"278\" y2=\"270\" stroke=\"#7A5A2B\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"330\" y1=\"115\" x2=\"288.5\" y2=\"270\" stroke=\"#7A5A2B\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"280\" y1=\"100\" x2=\"283.5\" y2=\"270\" stroke=\"#7A5A2B\" stroke-width=\"5\" stroke-linecap=\"round\"/><circle cx=\"200\" cy=\"90\" r=\"20\" fill=\"#8C2F39\"/><circle cx=\"200\" cy=\"90\" r=\"6\" fill=\"#FFF3C9\"/><circle cx=\"250\" cy=\"70\" r=\"17\" fill=\"#D98E04\"/><circle cx=\"250\" cy=\"70\" r=\"6\" fill=\"#FFF3C9\"/><circle cx=\"300\" cy=\"60\" r=\"20\" fill=\"#5B8BD0\"/><circle cx=\"300\" cy=\"60\" r=\"6\" fill=\"#FFF3C9\"/><circle cx=\"350\" cy=\"75\" r=\"17\" fill=\"#E8C46A\"/><circle cx=\"350\" cy=\"75\" r=\"6\" fill=\"#FFF3C9\"/><circle cx=\"395\" cy=\"100\" r=\"20\" fill=\"#8C2F39\"/><circle cx=\"395\" cy=\"100\" r=\"6\" fill=\"#FFF3C9\"/><circle cx=\"225\" cy=\"125\" r=\"17\" fill=\"#E8C46A\"/><circle cx=\"225\" cy=\"125\" r=\"6\" fill=\"#FFF3C9\"/><circle cx=\"330\" cy=\"115\" r=\"20\" fill=\"#8C2F39\"/><circle cx=\"330\" cy=\"115\" r=\"6\" fill=\"#FFF3C9\"/><circle cx=\"280\" cy=\"100\" r=\"17\" fill=\"#2F5D50\"/><circle cx=\"280\" cy=\"100\" r=\"6\" fill=\"#FFF3C9\"/><path d=\"M255 205 L315 205 L325 232 L245 232Z\" fill=\"#8C2F39\"/><path d=\"M265 232 L240 305 M305 232 L335 305\" stroke=\"#8C2F39\" stroke-width=\"12\" stroke-linecap=\"round\"/></svg>","Marguciai":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 350\" width=\"1120\" height=\"700\"><circle cx=\"280\" cy=\"175\" r=\"165\" fill=\"#F6ECD6\"/><path d=\"M280 45 C355 45 400 140 400 215 C400 285 350 325 280 325 C210 325 160 285 160 215 C160 140 205 45 280 45Z\" fill=\"#8C2F39\" stroke=\"#4A1219\" stroke-width=\"4\"/>\n<g clip-path=\"url(#e)\"><clipPath id=\"e\"><path d=\"M280 45 C355 45 400 140 400 215 C400 285 350 325 280 325 C210 325 160 285 160 215 C160 140 205 45 280 45Z\"/></clipPath>\n<rect x=\"150\" y=\"140\" width=\"260\" height=\"60\" fill=\"#D98E04\"/><polygon points=\"178,150 190,170 178,190 166,170\" fill=\"#F6ECD6\"/><polygon points=\"203,150 215,170 203,190 191,170\" fill=\"#F6ECD6\"/><polygon points=\"228,150 240,170 228,190 216,170\" fill=\"#F6ECD6\"/><polygon points=\"253,150 265,170 253,190 241,170\" fill=\"#F6ECD6\"/><polygon points=\"278,150 290,170 278,190 266,170\" fill=\"#F6ECD6\"/><polygon points=\"303,150 315,170 303,190 291,170\" fill=\"#F6ECD6\"/><polygon points=\"328,150 340,170 328,190 316,170\" fill=\"#F6ECD6\"/><polygon points=\"353,150 365,170 353,190 341,170\" fill=\"#F6ECD6\"/><polygon points=\"378,150 390,170 378,190 366,170\" fill=\"#F6ECD6\"/>\n<g fill=\"#F6ECD6\"><polygon points=\"280,70 292,95 268,95\"/><polygon points=\"250,100 262,125 238,125\"/><polygon points=\"310,100 322,125 298,125\"/></g>\n<rect x=\"150\" y=\"215\" width=\"260\" height=\"14\" fill=\"#F6ECD6\"/><g fill=\"#F6ECD6\"><circle cx=\"205\" cy=\"265\" r=\"9\"/><circle cx=\"245\" cy=\"280\" r=\"9\"/><circle cx=\"285\" cy=\"288\" r=\"9\"/><circle cx=\"325\" cy=\"280\" r=\"9\"/><circle cx=\"365\" cy=\"265\" r=\"9\"/></g></g></svg>","Cross":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 350\" width=\"1120\" height=\"700\"><circle cx=\"280\" cy=\"175\" r=\"165\" fill=\"#F6ECD6\"/><rect x=\"262\" y=\"120\" width=\"36\" height=\"200\" fill=\"#6B4423\" stroke=\"#3E2713\" stroke-width=\"3\"/><rect x=\"205\" y=\"160\" width=\"150\" height=\"30\" fill=\"#6B4423\" stroke=\"#3E2713\" stroke-width=\"3\"/>\n<polygon points=\"215,120 280,55 345,120\" fill=\"#8C5A2B\" stroke=\"#3E2713\" stroke-width=\"3\"/>\n<line x1=\"280\" y1=\"10\" x2=\"280\" y2=\"55\" stroke=\"#3E2713\" stroke-width=\"5\"/><line x1=\"258\" y1=\"30\" x2=\"302\" y2=\"30\" stroke=\"#3E2713\" stroke-width=\"5\"/>\n<circle cx=\"280\" cy=\"105\" r=\"9\" fill=\"#D98E04\"/><g fill=\"#D98E04\"><circle cx=\"220\" cy=\"175\" r=\"6\"/><circle cx=\"340\" cy=\"175\" r=\"6\"/></g>\n<path d=\"M120 320 H440\" stroke=\"#2F5D50\" stroke-width=\"10\" stroke-linecap=\"round\"/></svg>","Ceramics":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 560 350\" width=\"1120\" height=\"700\"><circle cx=\"280\" cy=\"175\" r=\"165\" fill=\"#F6ECD6\"/><path d=\"M230 90 C230 70 330 70 330 90 L322 110 C395 130 400 250 345 300 C320 320 240 320 215 300 C160 250 165 130 238 110Z\" fill=\"#2B2118\" stroke=\"#000\" stroke-width=\"3\"/>\n<path d=\"M395 150 C455 150 455 235 392 245\" fill=\"none\" stroke=\"#2B2118\" stroke-width=\"16\" stroke-linecap=\"round\"/>\n<g stroke=\"#C9A24D\" stroke-width=\"5\" fill=\"none\"><path d=\"M185 190 H375\"/><path d=\"M190 230 H370\"/><path d=\"M200 175 l15 -12 l15 12 l15 -12 l15 12 l15 -12 l15 12 l15 -12 l15 12 l15 -12 l15 12\"/></g>\n<path d=\"M200 275 l30 -22 l30 22 l30 -22 l30 22 l30 -22 l30 22\" stroke=\"#C9A24D\" stroke-width=\"4\" fill=\"none\"/><ellipse cx=\"280\" cy=\"90\" rx=\"50\" ry=\"10\" fill=\"#4A3B2A\"/></svg>"};
+const uri=k=>'data:image/svg+xml;utf8,'+encodeURIComponent(ART[k]);
+const S=[
+ {k:'Gintaras',a:'Gintaras',n:'Янтарь',lt:'Gintaras',f:['Самый популярный сувенир из Литвы: украшения и предметы искусства.','Для литовцев и балтов важен уже тысячелетиями.','Янтарь и латунь использовали для украшений национального костюма.'],s:'Литовское золото. Украшение, которое связывает современность с древней традицией.'},
+ {k:'Linas',a:'Linas',n:'Лён',lt:'Linas',f:['Литовский лён известен в Европе качеством и красотой.','Популярные покупки: салфетки, постельное бельё, блузы, платья.','Лён часто встречается в сказках и народных песнях.'],s:'Деревенский быт и тёплый, натуральный дом.'},
+ {k:'Sodai',a:'Sodai',n:'Соломенные садай',lt:'Sodai',f:['Делают из нарезанной и нанизанной соломы ржи, пшеницы или овса.','Гирлянды и многогранные звёзды украшали лучшие комнаты.','Входят в коллекцию нематериальных культурных ценностей.'],s:'Хлеб и урожай превращаются в украшение дома. Лёгкий сувенир для чемодана.'},
+ {k:'Verbos',a:'Verbos',n:'Верба',lt:'Verbos',f:['Букет из ореховых прутьев, сухоцветов, мха и колосьев.','Связана с Вербным воскресеньем и Пасхой.','Обязательный сувенир ярмарки Казюкаса в Вильнюсе (начало марта).'],s:'Весна и праздник. Верба стоит дома как украшение.'},
+ {k:'Marguciai',a:'Marguciai',n:'Пасхальные яйца',lt:'Margučiai',f:['Узоры процарапывают острым инструментом или рисуют воском.','Для окраски используют натуральные красители.','Роспись связана с празднованием Пасхи.'],s:'Яйцо с давних времён символ плодородия и жизни.'},
+ {k:'Cross',a:'Cross',n:'Кресты',lt:'Kryžiai',f:['Литву называют страной крестов.','Крестоделие внесено в список ЮНЕСКО в 2001 году.','Соединяет дерево, кузнечное дело и древние балтские символы.'],s:'Вера, память и национальная идентичность. Самый известный образ: Гора крестов.'},
+ {k:'Ceramics',a:'Ceramics',n:'Керамика',lt:'Keramika',f:['Гончарство относится к древнейшим ремёслам.','Кувшины, миски и сковороды востребованы до сих пор.','Чёрная керамика делается по доисторической технологии.'],s:'Древние балтские символы, растения и животные на глине.'}
+];
+const $=id=>document.getElementById(id);
+$('heroImg').src=uri('Gintaras');
+const pk=$('picker');
+S.forEach((s,i)=>{const b=document.createElement('button');b.className='pick';b.type='button';b.setAttribute('role','tab');b.innerHTML='<img alt="" src="'+uri(s.a)+'"><span>'+s.n+'</span>';b.onclick=()=>show(i);pk.appendChild(b)});
+function show(i){const s=S[i];[...pk.children].forEach((c,j)=>c.setAttribute('aria-selected',j===i));
+ $('sImg').src=uri(s.a);$('sImg').alt=s.n;$('sLt').textContent=s.lt;$('sTitle').textContent=s.n;
+ $('sList').innerHTML=s.f.map(x=>'<li>'+x+'</li>').join('');$('sSym').innerHTML='<b>Значение.</b> '+s.s}
+show(0);
+const Q=[
+ ['Какой сувенир называют «литовским золотом»?',['Лён','Янтарь','Керамику'],1,'Янтарь: самый популярный сувенир из Литвы.'],
+ ['Из чего делают соломенные садай?',['Из соломы ржи, пшеницы или овса','Из глины','Из льна'],0,'Нарезанную солому нанизывают в гирлянды и звёзды.'],
+ ['Где проходит ярмарка Казюкаса?',['В Каунасе','В Клайпеде','В Вильнюсе'],2,'Она проходит в Вильнюсе в начале марта, там продают вербы.'],
+ ['В каком году крестоделие внесли в список ЮНЕСКО?',['1994','2001','2015'],1,'Это произошло в 2001 году.'],
+ ['Какой десерт обязателен на литовской свадьбе?',['Яблочный сыр','Шакотис','Грибочки'],1,'Шакотис долго хранится и не теряет форму.'],
+ ['Что символизирует яйцо в пасхальной традиции?',['Жизнь и плодородие','Богатство','Дорогу'],0,'Яйцо издавна считается символом жизни.']
+];
+let qi=0,sc=0;const qz=$('quiz');
+function renderQ(){
+ if(qi>=Q.length){const t=sc>=5?'Отлично, вы готовы защищать проект.':sc>=3?'Хороший результат. Повторите витрину и попробуйте ещё раз.':'Пройдите витрину ещё раз и повторите попытку.';
+  qz.innerHTML='<div class="score">'+sc+' / '+Q.length+'</div><p class="lead" style="margin-top:12px">'+t+'</p><button class="cta" id="again" type="button">Пройти заново</button>';
+  $('again').onclick=()=>{qi=0;sc=0;renderQ()};return}
+ const q=Q[qi];
+ qz.innerHTML='<div class="prog"><span>Вопрос '+(qi+1)+' из '+Q.length+'</span><span>Баллы: '+sc+'</span></div><div class="bar"><i style="width:'+(qi/Q.length*100)+'%"></i></div><h3 class="q">'+q[0]+'</h3><div class="opts" id="opts"></div><p class="fb" id="fb"></p><div id="nx"></div>';
+ q[1].forEach((o,j)=>{const b=document.createElement('button');b.className='opt';b.type='button';b.textContent=o;
+  b.onclick=()=>{const ok=j===q[2];if(ok)sc++;[...$('opts').children].forEach((c,m)=>{c.disabled=true;if(m===q[2])c.classList.add('ok');else if(m===j)c.classList.add('bad')});
+   $('fb').textContent=(ok?'Верно. ':'Не совсем. ')+q[3];$('nx').innerHTML='<button class="cta next" id="nb" type="button">'+(qi===Q.length-1?'Результат':'Дальше')+'</button>';$('nb').onclick=()=>{qi++;renderQ()};$('nb').focus()};
+  $('opts').appendChild(b)});
+}
+renderQ();
+const root=document.documentElement;
+try{const t=localStorage.getItem('al-theme');if(t)root.setAttribute('data-theme',t)}catch(e){}
+$('tgl').onclick=()=>{const dark=root.getAttribute('data-theme')?root.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme: dark)').matches;const n=dark?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('al-theme',n)}catch(e){}};
+</script>
+</body>
+</html>
